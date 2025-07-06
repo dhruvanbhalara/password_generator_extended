@@ -102,13 +102,13 @@ class _PasswordWidgetState extends State<PasswordWidget> {
 
 ## Configuration Options
 
-| Parameter           | Type | Default | Description                  |
-| ------------------- | ---- | ------- | ---------------------------- |
-| length              | int  | 16      | Password length (minimum: 8) |
-| useUppercase        | bool | true    | Include uppercase letters    |
-| useLowercase        | bool | true    | Include lowercase letters    |
-| useNumbers          | bool | true    | Include numbers              |
-| useSpecialCharacter | bool | true    | Include special characters   |
+| Parameter           | Type | Default | Description                   |
+| ------------------- | ---- | ------- | ----------------------------- |
+| length              | int  | 12      | Password length (minimum: 12) |
+| useUppercase        | bool | true    | Include uppercase letters     |
+| useLowercase        | bool | true    | Include lowercase letters     |
+| useNumbers          | bool | true    | Include numbers               |
+| useSpecialCharacter | bool | true    | Include special characters    |
 
 ## Security Notes
 

@@ -64,13 +64,18 @@ class PasswordGenerator {
 
   /// Refreshes and returns a new password using the current configuration
   String refreshPassword() {
-    return generatePassword(
-      length: _config.length,
-      useUpperCase: _config.useUpperCase,
-      useLowerCase: _config.useLowerCase,
-      useNumbers: _config.useNumbers,
-      useSpecialChars: _config.useSpecialChars,
-    );
+    String password;
+    do {
+      password = generatePassword(
+        length: _config.length,
+        useUpperCase: _config.useUpperCase,
+        useLowerCase: _config.useLowerCase,
+        useNumbers: _config.useNumbers,
+        useSpecialChars: _config.useSpecialChars,
+      );
+    } while (!isStrongPassword(password)); // Regenerate if not strong
+
+    return password;
   }
 
   /// Generates a random password based on the specified criteria
@@ -98,8 +103,8 @@ class PasswordGenerator {
       useSpecialChars: useSpecialChars ?? _config.useSpecialChars,
     );
 
-    if (settings.length < 8) {
-      throw ArgumentError('Password length must be at least 8');
+    if (settings.length < 12) {
+      throw ArgumentError('Password length must be at least 12');
     }
 
     if (!settings.useUpperCase &&
@@ -122,10 +127,20 @@ class PasswordGenerator {
       characterPool += PasswordConstants.specialCharacters;
     }
 
-    // Generate the password
+    // Generate the password without repeating characters
     String password = '';
+    List<int> usedIndices = []; // Track used indices
     for (int i = 0; i < settings.length; i++) {
-      final randomIndex = _random.nextInt(characterPool.length);
+      if (characterPool.isEmpty) {
+        throw ArgumentError(
+          'Not enough unique characters to generate password',
+        );
+      }
+      int randomIndex;
+      do {
+        randomIndex = _random.nextInt(characterPool.length);
+      } while (usedIndices.contains(randomIndex)); // Ensure no repeats
+      usedIndices.add(randomIndex);
       password += characterPool[randomIndex];
     }
 
@@ -171,5 +186,35 @@ class PasswordGenerator {
 
     _lastGeneratedPassword = password;
     return password;
+  }
+
+  // Optional: Method to evaluate password strength
+  bool isStrongPassword(String password) {
+    // Check minimum length
+    if (password.length < 12) {
+      return false;
+    }
+
+    // Check for at least one uppercase letter
+    if (!RegExp(r'[A-Z]').hasMatch(password)) {
+      return false;
+    }
+
+    // Check for at least one lowercase letter
+    if (!RegExp(r'[a-z]').hasMatch(password)) {
+      return false;
+    }
+
+    // Check for at least one digit
+    if (!RegExp(r'\d').hasMatch(password)) {
+      return false;
+    }
+
+    // Check for at least one special character
+    if (!RegExp(r'[!@#$%^&*(),.?":{}|<>]').hasMatch(password)) {
+      return false;
+    }
+
+    return true; // Password is strong
   }
 }
