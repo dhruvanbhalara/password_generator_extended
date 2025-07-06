@@ -5,7 +5,12 @@ import '../validator/password_validator.dart';
 import '../constants/password_constants.dart';
 import 'ipassword_generator.dart';
 
+/// A concrete implementation of [IPasswordGenerator] for generating secure passwords.
+///
+/// This class provides methods to generate passwords based on configurable settings and ensures
+/// that generated passwords meet strength requirements.
 class PasswordGenerator implements IPasswordGenerator {
+  /// Creates a [PasswordGenerator] with the given settings and optional validator.
   PasswordGenerator({
     int length = 12,
     bool useUpperCase = true,
@@ -26,8 +31,12 @@ class PasswordGenerator implements IPasswordGenerator {
   PasswordGeneratorConfig _config;
   String? _lastGeneratedPassword;
 
+  /// The last generated password, or null if none has been generated yet.
   String? get lastPassword => _lastGeneratedPassword;
 
+  /// Updates the password generation configuration.
+  ///
+  /// Any parameter not provided will retain its previous value.
   void updateConfig({
     int? length,
     bool? useUpperCase,
@@ -45,6 +54,9 @@ class PasswordGenerator implements IPasswordGenerator {
   }
 
   @override
+  /// Generates a new password that meets the strength requirements.
+  ///
+  /// This method will keep generating passwords until one passes the validator's strength check.
   String refreshPassword() {
     String password;
     do {
@@ -54,6 +66,9 @@ class PasswordGenerator implements IPasswordGenerator {
   }
 
   @override
+  /// Generates a password using the current or provided settings.
+  ///
+  /// Throws [ArgumentError] if the length is less than 12 or if no character types are selected.
   String generatePassword({
     int? length,
     bool? useUpperCase,
