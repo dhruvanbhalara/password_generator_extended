@@ -1,3 +1,4 @@
+/// Constants used for password generation
 class PasswordConstants {
   static String upperCaseLetters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
   static String lowerCaseLetters = 'abcdefghijklmnopqrstuvwxyz';
