@@ -1,0 +1,66 @@
+name: Build and Deploy to Netlify
+
+on:
+  push:
+    tags:
+      - '*'
+
+jobs:
+  # Set up Flutter for all other tasks.
+  setup:
+    runs-on: ${{ matrix.os }}
+    env:
+      PUB_CACHE: ~/.pub-cache
+
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        include:
+          - os: ubuntu-latest
+            flutter_path: /opt/hostedtoolcache/flutter
+      fail-fast: false
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          flutter-version: ${{ secrets.FLUTTER_VERSION }}
+          cache: true
+
+      - name: Disbale analytics of flutter
+        run: flutter config --no-analytics
+
+      - name: Install pub Dependencies
+        run: flutter pub get
+
+      - name: Install example dependencies
+        run: cd example && flutter pub get
+
+      - name: Check for any formatting issues in the code.
+        run: dart format --set-exit-if-changed .
+
+      - name: Statically analyze the Dart code for any errors.
+        run: dart analyze .
+
+      - name: Run library tests
+        run: flutter test
+
+      - name: Run example tests
+        run: cd example && flutter test
+
+      - name: Build web app
+        run: cd example && flutter build web
+
+      - name: Deploy to Netlify
+        uses: nwtgck/actions-netlify@v3.0
+        with:
+          publish-dir: './example/build/web'
+          production-branch: master
+          production-deploy: true
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
