@@ -3,7 +3,7 @@ name: Analyze code
 # Trigger the Analyze code workflow
 on:
   pull_request:
-    branches: [ master ]
+    branches: [ main ]
 
 jobs:
   # Set up Flutter for all other tasks.
