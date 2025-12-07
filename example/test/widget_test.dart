@@ -179,59 +179,47 @@ void main() {
       // Ensure we are in Random strategy
       expect(find.text('Random'), findsOneWidget);
 
-      final scrollable = find.byType(Scrollable).first;
-
       // Deselect Uppercase
-      await tester.scrollUntilVisible(
-        find.widgetWithText(CheckboxListTile, 'Uppercase Letters (A-Z)'),
-        500.0,
-        scrollable: scrollable,
+      final upperCaseFinder = find.widgetWithText(
+        CheckboxListTile,
+        'Uppercase Letters (A-Z)',
       );
-      await tester.tap(
-        find.widgetWithText(CheckboxListTile, 'Uppercase Letters (A-Z)'),
-      );
+      await tester.ensureVisible(upperCaseFinder);
+      await tester.tap(upperCaseFinder);
       await tester.pumpAndSettle();
 
       // Deselect Lowercase
-      await tester.scrollUntilVisible(
-        find.widgetWithText(CheckboxListTile, 'Lowercase Letters (a-z)'),
-        500.0,
-        scrollable: scrollable,
+      final lowerCaseFinder = find.widgetWithText(
+        CheckboxListTile,
+        'Lowercase Letters (a-z)',
       );
-      await tester.tap(
-        find.widgetWithText(CheckboxListTile, 'Lowercase Letters (a-z)'),
-      );
+      await tester.ensureVisible(lowerCaseFinder);
+      await tester.tap(lowerCaseFinder);
       await tester.pumpAndSettle();
 
       // Deselect Numbers
-      await tester.scrollUntilVisible(
-        find.widgetWithText(CheckboxListTile, 'Numbers (0-9)'),
-        500.0,
-        scrollable: scrollable,
+      final numbersFinder = find.widgetWithText(
+        CheckboxListTile,
+        'Numbers (0-9)',
       );
-      await tester.tap(find.widgetWithText(CheckboxListTile, 'Numbers (0-9)'));
+      await tester.ensureVisible(numbersFinder);
+      await tester.tap(numbersFinder);
       await tester.pumpAndSettle();
 
       // Try to deselect Special Characters (last one)
-      await tester.scrollUntilVisible(
-        find.widgetWithText(CheckboxListTile, 'Special Characters (!@#\$...)'),
-        500.0,
-        scrollable: scrollable,
+      final specialCharsFinder = find.widgetWithText(
+        CheckboxListTile,
+        'Special Characters (!@#\$...)',
       );
-      await tester.tap(
-        find.widgetWithText(CheckboxListTile, 'Special Characters (!@#\$...)'),
-      );
+      await tester.ensureVisible(specialCharsFinder);
+      await tester.tap(specialCharsFinder);
       await tester.pumpAndSettle();
 
       // Verify Special Characters is still selected
       expect(
-          tester
-              .widget<CheckboxListTile>(
-                find.widgetWithText(
-                    CheckboxListTile, 'Special Characters (!@#\$...)'),
-              )
-              .value,
-          isTrue);
+        tester.widget<CheckboxListTile>(specialCharsFinder).value,
+        isTrue,
+      );
 
       // Verify SnackBar appears
       expect(find.text('At least one character type must be selected'),
