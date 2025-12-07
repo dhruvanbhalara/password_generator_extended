@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:password_generator_extended/password_generator_extended.dart';
 
+import 'strategies/custom_pin_strategy.dart';
 import 'strategies/memorable_password_strategy.dart';
 import 'strategies/pronounceable_password_strategy.dart';
 
@@ -61,6 +62,7 @@ class _PasswordExampleState extends State<PasswordExample>
     RandomPasswordStrategy(),
     MemorablePasswordStrategy(),
     PronounceablePasswordStrategy(),
+    CustomPinStrategy(),
   ];
   late IPasswordGenerationStrategy _selectedStrategy;
 
@@ -76,6 +78,9 @@ class _PasswordExampleState extends State<PasswordExample>
   );
   final TextEditingController _specialCharsController = TextEditingController(
     text: PasswordConstants.specialCharacters,
+  );
+  final TextEditingController _prefixController = TextEditingController(
+    text: 'USER',
   );
 
   @override
@@ -104,6 +109,9 @@ class _PasswordExampleState extends State<PasswordExample>
             useNumbers: _useNumbers,
             useSpecialChars: _useSpecialChars,
             excludeAmbiguousChars: _excludeAmbiguousChars,
+            extra: {
+              'prefix': _prefixController.text,
+            },
           ),
         );
         _password = _generator.generatePassword();
@@ -126,7 +134,9 @@ class _PasswordExampleState extends State<PasswordExample>
     _upperCaseController.dispose();
     _lowerCaseController.dispose();
     _numbersController.dispose();
+    _numbersController.dispose();
     _specialCharsController.dispose();
+    _prefixController.dispose();
     super.dispose();
   }
 
@@ -216,6 +226,8 @@ class _PasswordExampleState extends State<PasswordExample>
       return 'Memorable';
     } else if (strategy is PronounceablePasswordStrategy) {
       return 'Pronounceable';
+    } else if (strategy is CustomPinStrategy) {
+      return 'Custom PIN';
     }
     return 'Unknown';
   }
@@ -332,6 +344,10 @@ class _PasswordExampleState extends State<PasswordExample>
                                       is PronounceablePasswordStrategy) {
                                     if (_length < 8) _length = 8;
                                     if (_length > 20) _length = 20;
+                                  } else if (_selectedStrategy
+                                      is CustomPinStrategy) {
+                                    if (_length < 4) _length = 4;
+                                    if (_length > 12) _length = 12;
                                   }
 
                                   _generator = PasswordGenerator(
@@ -540,6 +556,47 @@ class _PasswordExampleState extends State<PasswordExample>
                                   });
                                 },
                               ),
+                            ),
+                          ],
+                        )
+                      else if (_selectedStrategy is CustomPinStrategy)
+                        Column(
+                          children: [
+                            TextField(
+                              controller: _prefixController,
+                              decoration: const InputDecoration(
+                                labelText: 'Prefix',
+                                helperText: 'e.g. USER, PIN, KEY',
+                              ),
+                              onChanged: (_) => _generatePassword(),
+                            ),
+                            const SizedBox(height: 16),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: Text(
+                                    'Length: ${_length.round()}',
+                                    style:
+                                        Theme.of(context).textTheme.bodyLarge,
+                                  ),
+                                ),
+                                Expanded(
+                                  flex: 2,
+                                  child: Slider(
+                                    value: _length,
+                                    min: 4,
+                                    max: 12,
+                                    divisions: 8,
+                                    label: _length.round().toString(),
+                                    onChanged: (value) {
+                                      setState(() {
+                                        _length = value;
+                                        _generatePassword();
+                                      });
+                                    },
+                                  ),
+                                ),
+                              ],
                             ),
                           ],
                         ),
