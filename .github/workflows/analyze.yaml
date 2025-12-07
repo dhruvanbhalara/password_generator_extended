@@ -2,15 +2,15 @@ name: Analyze code
 
 # Trigger the Analyze code workflow
 on:
+  push:
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   # Set up Flutter for all other tasks.
   setup:
     runs-on: ${{ matrix.os }}
-    env:
-      PUB_CACHE: ~/.pub-cache
 
     strategy:
       matrix:
@@ -30,7 +30,15 @@ jobs:
           channel: stable
           flutter-version: ${{ secrets.FLUTTER_VERSION }}
           cache: true
-        
+
+      - name: Cache Pub dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.pub-cache
+          key: ${{ runner.os }}-pub-${{ hashFiles('**/pubspec.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-pub-
+
       - name: Disbale analytics of flutter
         run: flutter config --no-analytics
 

@@ -3,14 +3,12 @@ name: Build and Deploy to Netlify
 on:
   push:
     tags:
-      - '*'
+      - "*"
 
 jobs:
   # Set up Flutter for all other tasks.
   setup:
     runs-on: ${{ matrix.os }}
-    env:
-      PUB_CACHE: ~/.pub-cache
 
     strategy:
       matrix:
@@ -30,6 +28,14 @@ jobs:
           channel: stable
           flutter-version: ${{ secrets.FLUTTER_VERSION }}
           cache: true
+
+      - name: Cache Pub dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.pub-cache
+          key: ${{ runner.os }}-pub-${{ hashFiles('**/pubspec.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-pub-
 
       - name: Disbale analytics of flutter
         run: flutter config --no-analytics
@@ -58,7 +64,7 @@ jobs:
       - name: Deploy to Netlify
         uses: nwtgck/actions-netlify@v3.0
         with:
-          publish-dir: './example/build/web'
+          publish-dir: "./example/build/web"
           production-branch: master
           production-deploy: true
         env:
