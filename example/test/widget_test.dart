@@ -8,7 +8,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
-
 import 'package:password_generator_extended_example/main.dart' show ExampleApp;
 
 void main() {
@@ -133,6 +132,98 @@ void main() {
               )
               .value,
           isTrue);
+    });
+
+    testWidgets('switches strategy without crashing', (
+      WidgetTester tester,
+    ) async {
+      await tester.pumpWidget(const ExampleApp());
+      await tester.pumpAndSettle();
+
+      // Verify initial strategy is Random
+      expect(find.text('Random'), findsOneWidget);
+
+      // Open dropdown
+      await tester.tap(find.text('Random'));
+      await tester.pumpAndSettle();
+
+      // Select Memorable strategy
+      await tester.tap(find.text('Memorable').last);
+      await tester.pumpAndSettle();
+
+      // Verify strategy changed
+      expect(find.text('Memorable'), findsOneWidget);
+
+      // Verify slider value was clamped to valid range (max 8 for Memorable)
+      final Slider slider = tester.widget(find.byType(Slider));
+      expect(slider.value, lessThanOrEqualTo(8.0));
+      expect(slider.value, greaterThanOrEqualTo(4.0));
+
+      // Switch back to Random
+      await tester.tap(find.text('Memorable'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Random').last);
+      await tester.pumpAndSettle();
+
+      // Verify slider value was clamped to valid range (min 12 for Random)
+      final Slider sliderRandom = tester.widget(find.byType(Slider));
+      expect(sliderRandom.value, greaterThanOrEqualTo(12.0));
+    });
+
+    testWidgets('prevents deselecting all character types', (
+      WidgetTester tester,
+    ) async {
+      await tester.pumpWidget(const ExampleApp());
+      await tester.pumpAndSettle();
+
+      // Ensure we are in Random strategy
+      expect(find.text('Random'), findsOneWidget);
+
+      // Deselect Uppercase
+      final upperCaseFinder = find.widgetWithText(
+        CheckboxListTile,
+        'Uppercase Letters (A-Z)',
+      );
+      await tester.ensureVisible(upperCaseFinder);
+      await tester.tap(upperCaseFinder);
+      await tester.pumpAndSettle();
+
+      // Deselect Lowercase
+      final lowerCaseFinder = find.widgetWithText(
+        CheckboxListTile,
+        'Lowercase Letters (a-z)',
+      );
+      await tester.ensureVisible(lowerCaseFinder);
+      await tester.tap(lowerCaseFinder);
+      await tester.pumpAndSettle();
+
+      // Deselect Numbers
+      final numbersFinder = find.widgetWithText(
+        CheckboxListTile,
+        'Numbers (0-9)',
+      );
+      await tester.ensureVisible(numbersFinder);
+      await tester.tap(numbersFinder);
+      await tester.pumpAndSettle();
+
+      // Try to deselect Special Characters (last one)
+      final specialCharsFinder = find.widgetWithText(
+        CheckboxListTile,
+        'Special Characters (!@#\$...)',
+      );
+      await tester.ensureVisible(specialCharsFinder);
+      await tester.tap(specialCharsFinder);
+      await tester.pumpAndSettle();
+
+      // Verify Special Characters is still selected
+      expect(
+        tester.widget<CheckboxListTile>(specialCharsFinder).value,
+        isTrue,
+      );
+
+      // Verify SnackBar appears
+      expect(find.text('At least one character type must be selected'),
+          findsOneWidget);
     });
   });
 }
