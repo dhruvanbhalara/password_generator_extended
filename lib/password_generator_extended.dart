@@ -3,7 +3,7 @@
 /// This library provides a flexible way to generate secure passwords using various
 /// strategies, including random characters, memorable words, and pronounceable strings.
 /// It also includes tools for password strength estimation and validation.
-library password_generator_extended;
+library;
 
 export 'src/config/password_generator_config.dart';
 export 'src/constants/password_constants.dart';
