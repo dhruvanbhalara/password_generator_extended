@@ -45,6 +45,7 @@ class RandomStrategyControls extends StatelessWidget {
             Expanded(
               flex: 2,
               child: Slider(
+                key: const Key('random_length_slider'),
                 value: length,
                 min: 12,
                 max: 32,
@@ -56,26 +57,31 @@ class RandomStrategyControls extends StatelessWidget {
           ],
         ),
         CheckboxListTile(
+          key: const Key('checkbox_uppercase'),
           title: const Text('Uppercase Letters (A-Z)'),
           value: useUpperCase,
           onChanged: onUpperCaseChanged,
         ),
         CheckboxListTile(
+          key: const Key('checkbox_lowercase'),
           title: const Text('Lowercase Letters (a-z)'),
           value: useLowerCase,
           onChanged: onLowerCaseChanged,
         ),
         CheckboxListTile(
+          key: const Key('checkbox_numbers'),
           title: const Text('Numbers (0-9)'),
           value: useNumbers,
           onChanged: onNumbersChanged,
         ),
         CheckboxListTile(
+          key: const Key('checkbox_special_chars'),
           title: const Text('Special Characters (!@#\$...)'),
           value: useSpecialChars,
           onChanged: onSpecialCharsChanged,
         ),
         CheckboxListTile(
+          key: const Key('checkbox_exclude_ambiguous'),
           title: const Text('Exclude Ambiguous Characters'),
           subtitle: const Text('(e.g. I, l, 1, O, 0)'),
           value: excludeAmbiguousChars,

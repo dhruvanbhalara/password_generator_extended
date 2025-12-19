@@ -53,6 +53,7 @@ class PasswordOptions extends StatelessWidget {
               ),
               child: DropdownButtonHideUnderline(
                 child: DropdownButton<IPasswordGenerationStrategy>(
+                  key: const Key('strategy_dropdown'),
                   value: selectedStrategy,
                   isDense: true,
                   items: strategies.map((strategy) {

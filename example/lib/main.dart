@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:password_generator_extended/password_generator_extended.dart';
-import 'package:password_generator_extended_example/widgets/customize_character_sets_dialog.dart';
 
 import 'strategies/custom_pin_strategy.dart';
 import 'strategies/memorable_password_strategy.dart';
 import 'strategies/pronounceable_password_strategy.dart';
 import 'widgets/action_buttons.dart';
+import 'widgets/customize_character_sets_dialog.dart';
 import 'widgets/password_display.dart';
 import 'widgets/password_options.dart';
 import 'widgets/strategies/custom_pin_strategy_controls.dart';

@@ -18,12 +18,14 @@ class ActionButtons extends StatelessWidget {
           onPressed: onCopy,
           icon: const Icon(Icons.copy),
           label: const Text('Copy Password'),
+          key: const Key('copy_password_button'),
         ),
         const SizedBox(height: 16),
         ElevatedButton.icon(
           onPressed: onGenerate,
           icon: const Icon(Icons.refresh),
           label: const Text('Generate New Password'),
+          key: const Key('generate_password_button'),
         ),
       ],
     );

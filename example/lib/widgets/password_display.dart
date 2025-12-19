@@ -31,6 +31,7 @@ class PasswordDisplay extends StatelessWidget {
               opacity: fadeAnimation,
               child: SelectableText(
                 password,
+                key: const Key('password_display_text'),
                 style: Theme.of(context).textTheme.headlineMedium,
               ),
             ),
