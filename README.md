@@ -1,27 +1,19 @@
-<!--
-This README describes the package. If you publish this package to pub.dev,
-this README's contents appear on the landing page for your package.
-
-For information about how to write a good package README, see the guide for
-[writing package pages](https://dart.dev/tools/pub/writing-package-pages).
-
-For general information about developing packages, see the Dart guide for
-[creating packages](https://dart.dev/guides/libraries/create-packages)
-and the Flutter guide for
-[developing packages and plugins](https://flutter.dev/to/develop-packages).
--->
-
 # Password Generator Extended
 
-A secure password generator package for Flutter applications that creates strong, customizable passwords.
+A secure, modular, and extensible password generation library for Dart and Flutter.
 
 ## Features
 
-- Cryptographically secure random password generation
-- Customizable password length and character sets
-- Ensures at least one character from each selected type
+- **Cryptographically Secure**: Uses `Random.secure()` for strong random number generation.
+- **Modular Design**: Built with interfaces (`IPasswordGenerationStrategy`, `IPasswordStrengthEstimator`) for maximum flexibility.
+- **Customizable**:
+  - Configure length, character sets, and exclusion of ambiguous characters.
+  - Inject custom generation strategies.
+  - Inject custom strength estimators.
+- **Extensible**: Easily add new strategies (e.g., memorable words, PINs) without modifying the core library.
+- **Validation**: Built-in validation ensures generated passwords meet your criteria.
 
-## Getting started
+## Getting Started
 
 Add the package to your `pubspec.yaml`:
 
@@ -37,92 +29,94 @@ dependencies:
 ```dart
 import 'package:password_generator_extended/password_generator_extended.dart';
 
-// Create a generator with default settings
+void main() {
+  // Create a generator with default settings (RandomPasswordStrategy)
+  final generator = PasswordGenerator();
+
+  // Generate a password
+  String password = generator.generatePassword(); 
+  print(password); // e.g., "aB3$kL9@pQ2!"
+}
+```
+
+### Custom Configuration
+
+```dart
 final generator = PasswordGenerator();
 
-// Generate a password
-String password = generator.generate(); // Creates a 16-character password with all character types
-```
-
-### Customized Usage
-
-```dart
-final generator = PasswordGenerator(
-  length: 20,              // Password length
-  useUppercase: true,      // Include uppercase letters
-  useLowercase: true,      // Include lowercase letters
-  useNumbers: true,        // Include numbers
-  useSpecialCharacter: true,        // Include special characters
+generator.updateConfig(
+  PasswordGeneratorConfig(
+    length: 20,
+    useUpperCase: true,
+    useLowerCase: true,
+    useNumbers: true,
+    useSpecialChars: true,
+    excludeAmbiguousChars: true, // e.g., excludes 'I', 'l', '1', 'O', '0'
+  ),
 );
 
-// Generate with custom length
-String password = generator.generate(length: 24);
-
-// Change settings after initialization
-generator.length = 18;
-generator.useSpecialCharacter = false;
+String password = generator.generatePassword();
 ```
 
-### Flutter Widget Example
+### Using Custom Strategies
+
+The library supports custom generation strategies. You can implement `IPasswordGenerationStrategy` to create your own.
+
+**Note**: The `MemorablePasswordStrategy` and `PronounceablePasswordStrategy` have been moved to the `example` app to serve as learning resources. You can copy them into your project if needed.
 
 ```dart
-class PasswordWidget extends StatefulWidget {
-  @override
-  State<PasswordWidget> createState() => _PasswordWidgetState();
-}
+// Example of using a custom strategy (e.g., from the example app)
+final memorableStrategy = MemorablePasswordStrategy(separator: '-');
+final generator = PasswordGenerator(generationStrategy: memorableStrategy);
 
-class _PasswordWidgetState extends State<PasswordWidget> {
-  final generator = PasswordGenerator();
-  String password = '';
+generator.updateConfig(PasswordGeneratorConfig(length: 4)); // 4 words
+String password = generator.generatePassword(); // e.g., "correct-horse-battery-staple"
+```
 
-  @override
-  void initState() {
-    super.initState();
-    password = generator.generate();
-  }
+### Password Strength Estimation
 
+The library includes a default entropy-based strength estimator, but you can inject your own (e.g., one based on zxcvbn).
+
+```dart
+class MyCustomStrengthEstimator implements IPasswordStrengthEstimator {
   @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        SelectableText(password),
-        ElevatedButton(
-          onPressed: () {
-            setState(() {
-              password = generator.generate();
-            });
-          },
-          child: Text('Generate New Password'),
-        ),
-      ],
-    );
+  PasswordStrength estimatePasswordStrength(String password) {
+    // Your custom logic here
+    return PasswordStrength.strong;
   }
 }
+
+final generator = PasswordGenerator(
+  strengthEstimator: MyCustomStrengthEstimator(),
+);
+
+PasswordStrength strength = generator.estimateStrength("myPassword123");
 ```
 
 ## Configuration Options
 
-| Parameter           | Type | Default | Description                   |
-| ------------------- | ---- | ------- | ----------------------------- |
-| length              | int  | 12      | Password length (minimum: 12) |
-| useUppercase        | bool | true    | Include uppercase letters     |
-| useLowercase        | bool | true    | Include lowercase letters     |
-| useNumbers          | bool | true    | Include numbers               |
-| useSpecialCharacter | bool | true    | Include special characters    |
+| Parameter               | Type | Default | Description                                      |
+| ----------------------- | ---- | ------- | ------------------------------------------------ |
+| `length`                | int  | 12      | Password length (or word count for some strategies) |
+| `useUpperCase`          | bool | true    | Include uppercase letters                        |
+| `useLowerCase`          | bool | true    | Include lowercase letters                        |
+| `useNumbers`            | bool | true    | Include numbers                                  |
+| `useSpecialChars`       | bool | true    | Include special characters                       |
+| `excludeAmbiguousChars` | bool | false   | Exclude characters like 'I', 'l', '1', 'O', '0'  |
+| `extra`                 | Map  | {}      | Custom parameters for user-defined strategies    |
 
 ## Security Notes
 
-- Uses `Random.secure()` for cryptographically secure random number generation
-- Ensures at least one character from each selected type is included
-- Minimum password length of 8 characters recommended
-- Validates input parameters to prevent weak passwords
+- **CSPRNG**: Uses `Random.secure()` for all random number generation.
+- **Entropy**: The default strength estimator uses Shannon entropy to calculate password strength.
+- **Validation**: Strategies include a `validate` method to ensure configuration parameters are safe before generation.
 
 ## Additional Information
 
-- Source code: [GitHub Repository](https://github.com/dhruvanbhalara/password_generator_extended)
-- Bug reports and feature requests: [Issue Tracker](https://github.com/dhruvanbhalara/password_generator_extended/issues)
-- For detailed examples, check the [example](example) folder
+- **Source Code**: [GitHub Repository](https://github.com/dhruvanbhalara/password_generator_extended)
+- **Issues**: [Issue Tracker](https://github.com/dhruvanbhalara/password_generator_extended/issues)
+- **Examples**: Check the `example` folder for a full Flutter app demonstrating custom strategies and UI integration.
 
 ## License
 
-MIT License - see the [LICENSE](LICENSE) file for details
+MIT License - see the [LICENSE](LICENSE) file for details.
