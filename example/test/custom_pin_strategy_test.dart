@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:password_generator_extended/password_generator_extended.dart';
+import 'package:password_engine/password_engine.dart';
 
-import 'package:password_generator_extended_example/strategies/custom_pin_strategy.dart';
+import 'package:password_engine_example/strategies/custom_pin_strategy.dart';
 
 void main() {
   group('CustomPinStrategy', () {

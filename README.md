@@ -1,4 +1,4 @@
-# Password Generator Extended
+# Password Engine
 
 A secure, modular, and extensible password generation library for Dart and Flutter.
 
@@ -19,7 +19,7 @@ Add the package to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  password_generator_extended: ^1.0.0
+  password_engine: ^1.0.0
 ```
 
 ## Usage
@@ -27,7 +27,7 @@ dependencies:
 ### Basic Usage
 
 ```dart
-import 'package:password_generator_extended/password_generator_extended.dart';
+import 'package:password_engine/password_engine.dart';
 
 void main() {
   // Create a generator with default settings (RandomPasswordStrategy)
@@ -113,8 +113,8 @@ PasswordStrength strength = generator.estimateStrength("myPassword123");
 
 ## Additional Information
 
-- **Source Code**: [GitHub Repository](https://github.com/dhruvanbhalara/password_generator_extended)
-- **Issues**: [Issue Tracker](https://github.com/dhruvanbhalara/password_generator_extended/issues)
+- **Source Code**: [GitHub Repository](https://github.com/dhruvanbhalara/password_engine)
+- **Issues**: [Issue Tracker](https://github.com/dhruvanbhalara/password_engine/issues)
 - **Examples**: Check the `example` folder for a full Flutter app demonstrating custom strategies and UI integration.
 
 ## License

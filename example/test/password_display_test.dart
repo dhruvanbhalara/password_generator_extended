@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:password_generator_extended/password_generator_extended.dart';
-import 'package:password_generator_extended_example/widgets/password_display.dart';
+import 'package:password_engine/password_engine.dart';
+import 'package:password_engine_example/widgets/password_display.dart';
 
 void main() {
   group('PasswordDisplay', () {
