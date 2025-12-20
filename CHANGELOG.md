@@ -2,7 +2,7 @@
 
 ## 1.0.0
 
-- Initial release of `password_generator_extended`.
+- Initial release of `password_engine`.
 - **Core Features**:
   - Flexible password generation with configurable character sets (uppercase, lowercase, numbers, special characters) and length.
   - Architecture based on Strategy pattern allowing custom generation algorithms.

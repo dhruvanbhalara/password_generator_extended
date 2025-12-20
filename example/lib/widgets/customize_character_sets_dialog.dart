@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:password_generator_extended/password_generator_extended.dart';
+import 'package:password_engine/password_engine.dart';
 
 class CustomizeCharacterSetsDialog extends StatefulWidget {
   final VoidCallback onSave;

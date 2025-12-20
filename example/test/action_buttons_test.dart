@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:password_generator_extended_example/widgets/action_buttons.dart';
+import 'package:password_engine_example/widgets/action_buttons.dart';
 
 void main() {
   group('ActionButtons', () {

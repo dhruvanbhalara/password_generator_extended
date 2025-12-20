@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:password_generator_extended/password_generator_extended.dart';
+import 'package:password_engine/password_engine.dart';
 
 import 'strategies/custom_pin_strategy.dart';
 import 'strategies/memorable_password_strategy.dart';

@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:password_generator_extended/password_generator_extended.dart';
+import 'package:password_engine/password_engine.dart';
 
 void main() {
   late PasswordGenerator generator;

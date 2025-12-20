@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:password_generator_extended_example/main.dart' show ExampleApp;
+import 'package:password_engine_example/main.dart' show ExampleApp;
 
 void main() {
   group('PasswordGeneratorApp', () {

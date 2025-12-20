@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import 'package:password_generator_extended/password_generator_extended.dart';
+import 'package:password_engine/password_engine.dart';
 
 /// A password generation strategy that creates a pronounceable password.
 ///

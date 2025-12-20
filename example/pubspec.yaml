@@ -1,16 +1,16 @@
-name: password_generator_extended_example
-description: Example app for password_generator_extended package
-publish_to: 'none'
+name: password_engine_example
+description: Example app for password_engine package
+publish_to: "none"
 
 version: 1.0.0+1
 
 environment:
-  sdk: '>=3.0.0 <4.0.0'
+  sdk: ">=3.0.0 <4.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
-  password_generator_extended:
+  password_engine:
     path: ../
 
 dev_dependencies:
@@ -29,7 +29,6 @@ dev_dependencies:
 
 # The following section is specific to Flutter packages.
 flutter:
-
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.

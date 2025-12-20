@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:password_generator_extended/password_generator_extended.dart';
-import 'package:password_generator_extended_example/strategies/memorable_password_strategy.dart';
-import 'package:password_generator_extended_example/widgets/password_options.dart';
+import 'package:password_engine/password_engine.dart';
+import 'package:password_engine_example/strategies/memorable_password_strategy.dart';
+import 'package:password_engine_example/widgets/password_options.dart';
 
 void main() {
   group('PasswordOptions', () {
